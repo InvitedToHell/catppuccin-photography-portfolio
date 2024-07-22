@@ -5,8 +5,8 @@ export default {
     extend: {},
   },
   plugins: [require("daisyui")],
-  daisycss: {
-    themes: ["pastel", "black"],
-    darkMode: ["class", '[data-theme="black"]'],
+  daisyui: {
+    themes: ["pastel", "sunset"],
+    darkMode: ["class", '[data-theme="sunset"]'],
   },
 };
