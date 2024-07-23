@@ -1,3 +1,18 @@
+<script>
+  import ThemeSwitch from "$lib/components/themeSwitch.svelte";
+  import { supabase } from "$lib/supabaseClient";
+  async function signInWithGithub() {
+    console.log("signing in with github");
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "github",
+    });
+  }
+
+  async function signOut() {
+    const { error } = await supabase.auth.signOut();
+  }
+</script>
+
 <div class="hero bg-base-200 min-h-screen">
   <div class="hero-content flex-col lg:flex-row-reverse">
     <div class="text-center lg:text-left">
@@ -31,6 +46,7 @@
             class="input input-bordered"
             required
           />
+          <!-- svelte-ignore a11y-label-has-associated-control -->
           <label class="label">
             <a href="#" class="label-text-alt link link-hover"
               >Forgot password?</a
@@ -40,7 +56,23 @@
         <div class="form-control mt-6">
           <button class="btn btn-primary">Login</button>
         </div>
+
+        <div class="divider">OR</div>
+
+        <!-- svelte-ignore a11y-missing-attribute -->
+        <a
+          on:click={signInWithGithub}
+          class="btn inline-flex h-10 w-full btn btn-secondary items-center justify-center gap-2 p-2"
+          ><img
+            src="https://www.svgrepo.com/show/512317/github-142.svg"
+            alt="GitHub"
+            class="h-[18px] w-[18px]"
+          />
+          Continue with GitHub
+        </a>
       </form>
     </div>
   </div>
 </div>
+
+<ThemeSwitch />
