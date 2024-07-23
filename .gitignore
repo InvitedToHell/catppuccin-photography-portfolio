@@ -1,0 +1,46 @@
+node_modules
+
+# Output
+.output
+.vercel
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+static/images/edinburgh-16.jpg
+static/images/edinburgh-17.jpg
+static/images/edinburgh-18.jpg
+static/images/edinburgh-2.jpg
+static/images/edinburgh-21.jpg
+static/images/edinburgh-22.jpg
+static/images/edinburgh-23.jpg
+static/images/edinburgh-24.jpg
+static/images/edinburgh-25.jpg
+static/images/edinburgh-3.jpg
+static/images/edinburgh-4.jpg
+static/images/edinburgh-5.jpg
+static/images/edinburgh-6.jpg
+static/images/edinburgh-7.jpg
+static/images/edinburgh-8.jpg
+static/images/edinburgh-9.jpg
+static/images/stillleben-2.jpg
+static/images/edinburgh-1.jpg
+static/images/edinburgh-10.jpg
+static/images/edinburgh-11.jpg
+static/images/edinburgh-12.jpg
+static/images/edinburgh-13.jpg
+static/images/edinburgh-14.jpg
+static/images/edinburgh-15.jpg
+src/lib/supabaseClient.ts
