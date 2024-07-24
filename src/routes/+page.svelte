@@ -1,15 +1,36 @@
-<script>
+<script lang="ts">
   import { goto } from "$app/navigation";
   import ThemeSwitch from "$lib/components/themeSwitch.svelte";
   import { supabase } from "$lib/supabaseClient";
+  import { onMount } from "svelte";
   import Gallery from "svelte-image-gallery";
-
+  let userName = "";
+  let avatarUrl = "";
   let imageCount = 10;
   const totalImages = 30; // Assuming there are 30 images available
+
   let images = Array.from(
     { length: imageCount },
     (_, i) => `/images/edinburgh-${i + 1}.jpg`,
   );
+
+  onMount(async () => {
+    await checkLoggedIn();
+    if (loggedIn) {
+      await getAvatarUrl();
+      await getUserName();
+    }
+  });
+
+  async function checkLoggedIn() {
+    // Logic to check if the user is logged in
+    // This could be checking for a valid session, token, etc.
+    // For now, it's a placeholder that should be replaced with actual logic
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    loggedIn = session ? true : false;
+  }
 
   function loadMoreImages() {
     if (imageCount < totalImages) {
@@ -22,7 +43,7 @@
     }
   }
 
-  function handleClick(e) {
+  function handleClick(e: any) {
     console.log(e.detail.src);
   }
   // Import goto from $app/navigation
@@ -41,13 +62,50 @@
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     loggedIn = false;
+    avatarUrl = ""; // Clear the avatar URL on sign out
+    userName = "";
   }
-  let isHovered = false;
+
+  async function getAvatarUrl() {
+    if (!loggedIn) {
+      console.log("User not logged in");
+      return;
+    }
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user && user.user_metadata && user.user_metadata.avatar_url) {
+      avatarUrl = user.user_metadata.avatar_url;
+    } else {
+      console.log("User or user metadata or avatar URL not found");
+    }
+  }
+
+  async function getUserName() {
+    if (!loggedIn) {
+      console.log("User not logged in");
+      return;
+    }
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user && user.user_metadata && user.user_metadata.full_name) {
+      userName = user.user_metadata.full_name;
+    } else {
+      console.log("User or user metadata or full name not found");
+      return "User";
+    }
+  }
 </script>
 
 <div class="navbar glass sticky top-0">
   <div class="flex-1">
-    <a class="btn btn-ghost text-xl">daisyUI</a>
+    {#if loggedIn}
+      <a class="btn btn-ghost text-xl">{userName}</a>
+    {/if}
+    {#if !loggedIn}
+      <a class="btn btn-ghost text-xl">Home</a>
+    {/if}
   </div>
   <div class="flex-none gap-2">
     <ThemeSwitch />
@@ -73,10 +131,9 @@
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
-            <img
-              alt="Tailwind CSS Navbar component"
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-            />
+            {#if loggedIn}
+              <img src={avatarUrl} alt="User Avatar" />
+            {/if}
           </div>
         </div>
         <ul
